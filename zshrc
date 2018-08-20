@@ -83,3 +83,13 @@ export SSH_KEY_PATH="~/.ssh/rsa_id"
 # Example aliases
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
+
+alias did="vim +'normal Go' +'r!date' ~/did.txt"
+
+# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
+export PATH="$PATH:$HOME/.rvm/bin"
+# export PATH="$HOME/Library/Python/2.7/lib/python/site-packages:$PATH"
+export PATH="/usr/local/opt/python/libexec/bin:/Applications/MacVim.app/Contents/bin:$PATH"
+export PROJECT_HOME=$HOME/projects
+export VIRTUALENVWRAPPER_WORKON_CD=1
+source /usr/local/bin/virtualenvwrapper.sh

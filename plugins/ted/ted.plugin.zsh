@@ -1,5 +1,6 @@
 # Aliases
 alias chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
+alias brewup='brew update; brew upgrade; brew prune; brew cleanup; brew doctor'
 
 # FileSearch
 function f() { find . -iname "*$1*" ${@:2} }

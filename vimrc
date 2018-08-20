@@ -15,8 +15,8 @@ set nowrap
 "" Whitespace
 ""
 
-set tabstop=3                     " a tab is three spaces
-set shiftwidth=3                  " an autoindent (with <<) is three spaces
+set tabstop=4                     " a tab is three spaces
+set shiftwidth=4                  " an autoindent (with <<) is three spaces
 set expandtab                     " use spaces, not tabs
 set list                          " Show invisible characters
 
@@ -240,6 +240,9 @@ map <Leader>= <C-w>=
 if has("gui_macvim") && has("gui_running")
   " Map command-[ and command-] to indenting or outdenting
   " while keeping the original selection in visual mode
+
+  set guifont=Menlo:h14
+
   vmap <D-]> >gv
   vmap <D-[> <gv
 
