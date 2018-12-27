@@ -32,7 +32,7 @@ ZSH_THEME="pygmalion"
 # ENABLE_CORRECTION="true"
 
 # Uncomment the following line to display red dots whilst waiting for completion.
-# COMPLETION_WAITING_DOTS="true"
+COMPLETION_WAITING_DOTS="true"
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
@@ -63,11 +63,11 @@ source $ZSH/oh-my-zsh.sh
 # export LANG=en_US.UTF-8
 
 # Preferred editor for local and remote sessions
-# if [[ -n $SSH_CONNECTION ]]; then
-#   export EDITOR='vim'
-# else
-#   export EDITOR='mvim'
-# fi
+if [[ -n $SSH_CONNECTION ]]; then
+  export EDITOR='vim'
+else
+  export EDITOR='mvim'
+fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
@@ -84,13 +84,11 @@ export SSH_KEY_PATH="~/.ssh/rsa_id"
 # alias zshconfig="mate ~/.zshrc"
 # alias ohmyzsh="mate ~/.oh-my-zsh"
 
-alias did="vim +'normal Go' +'r!date' ~/did.txt"
-
 # Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
 export PATH="$PATH:$HOME/.rvm/bin"
 # export PATH="$HOME/Library/Python/2.7/lib/python/site-packages:$PATH"
 export PATH="/usr/local/opt/python/libexec/bin:/Applications/MacVim.app/Contents/bin:$PATH"
-export PROJECT_HOME=$HOME/projects
+export PROJECT_HOME=$HOME/Developer
 export VIRTUALENVWRAPPER_WORKON_CD=1
 source /usr/local/bin/virtualenvwrapper.sh
 

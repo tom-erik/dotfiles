@@ -1,6 +1,7 @@
 # Aliases
-alias chrome="/Applications/Google\ Chrome.app/Contents/MacOS/Google\ Chrome"
 alias brewup='brew update; brew upgrade; brew prune; brew cleanup; brew doctor'
+alias did="vim +'normal Go' +'r!date' ~/did.txt"
+
 
 # FileSearch
 function f() { find . -iname "*$1*" ${@:2} }
@@ -18,4 +19,4 @@ fancy-ctrl-z () {
 zle -N fancy-ctrl-z
 bindkey '^Z' fancy-ctrl-z
 
-# test -e "$HOME/.iterm2_shell_integration.zsh" && source "$HOME/.iterm2_shell_integration.zsh"
+test -e "$HOME/.iterm2_shell_integration.zsh" && source "$HOME/.iterm2_shell_integration.zsh"
