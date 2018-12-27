@@ -1,5 +1,7 @@
 set nocompatible
 
+"call pathogen#infect()
+
 set number
 set numberwidth=5
 set cursorline
@@ -15,15 +17,14 @@ set nowrap
 "" Whitespace
 ""
 
-set tabstop=4                     " a tab is three spaces
-set shiftwidth=4                  " an autoindent (with <<) is three spaces
+set tabstop=3                     " a tab is three spaces
+set shiftwidth=3                  " an autoindent (with <<) is three spaces
 set expandtab                     " use spaces, not tabs
 set list                          " Show invisible characters
 
 if filereadable(expand("~/.vim/bundles"))
   source ~/.vim/bundles
 endif
-
 ""
 "" Searching
 ""
@@ -99,6 +100,7 @@ augroup vimrcEx
   " Set syntax highlighting for specific file types
 "  autocmd BufRead,BufNewFile Appraisals set filetype=ruby
   autocmd BufRead,BufNewFile *.md set filetype=markdown
+  autocmd BufRead,BufNewFile todo.txt set filetype=taskpaper
 
   " Enable spellchecking for Markdown
   autocmd FileType markdown,mail setlocal spell
@@ -159,6 +161,11 @@ nnoremap <leader><leader> <c-^>
 " Get off my lawn
 nnoremap <Left> :echoe "Use h"<CR>
 nnoremap <Right> :echoe "Use l"<CR>
+
+" vim-rspec mappings
+nnoremap <Leader>t :call RunCurrentSpecFile()<CR>
+nnoremap <Leader>s :call RunNearestSpec()<CR>
+nnoremap <Leader>l :call RunLastSpec()<CR>
 
 " Run commands that require an interactive shell
 nnoremap <Leader>r :RunInInteractiveShell<space>
@@ -378,3 +385,4 @@ endif
 if filereadable($HOME . "/.vimrc.local")
   source ~/.vimrc.local
 endif
+

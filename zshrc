@@ -93,3 +93,7 @@ export PATH="/usr/local/opt/python/libexec/bin:/Applications/MacVim.app/Contents
 export PROJECT_HOME=$HOME/projects
 export VIRTUALENVWRAPPER_WORKON_CD=1
 source /usr/local/bin/virtualenvwrapper.sh
+
+function pretty_tsv {
+    perl -pe 's/((?<=\t)|(?<=^))\t/ \t/g;' "$@" | column -t -s $'\t' | less  -F -S -X -K
+}
