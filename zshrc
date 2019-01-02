@@ -95,3 +95,15 @@ source /usr/local/bin/virtualenvwrapper.sh
 function pretty_tsv {
     perl -pe 's/((?<=\t)|(?<=^))\t/ \t/g;' "$@" | column -t -s $'\t' | less  -F -S -X -K
 }
+
+# type f to find things by name
+alias f="find . -name"
+
+# get current ip and isp
+alias gip="curl ipinfo.io/ip && curl ipinfo.io/org"
+
+# what is taking up disk space
+alias s="du -hs * | sort -rh | head -5"
+
+# Search your history for something, with colorized output
+alias hs="history | grep"
