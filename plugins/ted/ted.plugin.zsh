@@ -1,7 +1,7 @@
 # Aliases
 alias brewup='brew update; brew upgrade; brew prune; brew cleanup; brew doctor'
-alias did="vim +'normal Go' +'r!date' ~/did.txt"
-
+alias did="mvim +'normal Go' +'r!date' ~/did.txt"
+alias todo="mvim ~/Documents/todo.txt"
 
 # FileSearch
 function f() { find . -iname "*$1*" ${@:2} }

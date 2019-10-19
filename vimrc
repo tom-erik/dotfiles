@@ -239,6 +239,7 @@ map <Down> gj
 map <Up> gk
 
 " Toggle hlsearch with <leader>hs
+nnoremap <CR> :noh<CR><CR>
 nmap <leader>hs :set hlsearch! hlsearch?<CR>
 
 " Adjust viewports to the same size
