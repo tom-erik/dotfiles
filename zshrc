@@ -51,7 +51,7 @@ COMPLETION_WAITING_DOTS="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git git-flow sublime ted z)
+plugins=(git sublime ted z history)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -62,6 +62,8 @@ source $ZSH/oh-my-zsh.sh
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
+unset INC_APPEND_HISTORY
+
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
@@ -71,26 +73,6 @@ fi
 
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
-
-# ssh
-export SSH_KEY_PATH="~/.ssh/rsa_id"
-
-# Set personal aliases, overriding those provided by oh-my-zsh libs,
-# plugins, and themes. Aliases can be placed here, though oh-my-zsh
-# users are encouraged to define aliases within the ZSH_CUSTOM folder.
-# For a full list of active aliases, run `alias`.
-#
-# Example aliases
-# alias zshconfig="mate ~/.zshrc"
-# alias ohmyzsh="mate ~/.oh-my-zsh"
-
-# Add RVM to PATH for scripting. Make sure this is the last PATH variable change.
-export PATH="$PATH:$HOME/.rvm/bin"
-# export PATH="$HOME/Library/Python/2.7/lib/python/site-packages:$PATH"
-export PATH="/usr/local/opt/python/libexec/bin:/Applications/MacVim.app/Contents/bin:$PATH"
-export PROJECT_HOME=$HOME/Developer
-export VIRTUALENVWRAPPER_WORKON_CD=1
-source /usr/local/bin/virtualenvwrapper.sh
 
 function pretty_tsv {
     perl -pe 's/((?<=\t)|(?<=^))\t/ \t/g;' "$@" | column -t -s $'\t' | less  -F -S -X -K
@@ -105,5 +87,4 @@ alias gip="curl ipinfo.io/ip && curl ipinfo.io/org"
 # what is taking up disk space
 alias s="du -hs * | sort -rh | head -5"
 
-# Search your history for something, with colorized output
-alias hs="history | grep"
+test -f "/usr/local/bin/virtualenvwrapper.sh" && source /usr/local/bin/virtualenvwrapper.sh
