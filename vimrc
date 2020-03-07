@@ -12,6 +12,7 @@ set ruler         " show the cursor position all the time
 set showcmd       " display incomplete commands
 set autowrite     " Automatically :write before running commands
 set nowrap
+set noerrorbells visualbell t_vb=
 
 ""
 "" Whitespace
@@ -87,7 +88,6 @@ hi User5 term=inverse,bold cterm=NONE ctermbg=24 ctermfg=209
 
 augroup vimrcEx
   autocmd!
-  setlocal spelllang=nb
 
   " When editing a file, always jump to the last known cursor position.
   " Don't do it for commit messages, when the position is invalid, or when
