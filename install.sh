@@ -1,11 +1,8 @@
 #!/usr/bin/env bash
 
-cd ~
-DOTFILES=~/Developer/dotfiles
+DOTFILES=$HOME/Developer/dotfiles
 
-ln -sh $DOTFILES/zshrc .zshrc
-if [[ -z $ZSH_CUSTOM/plugins/ted ]]; then
-   ln -sh $DOTFILES/plugins/ted $ZSH_CUSTOM/plugins/ted
-fi
-ln -sh $DOTFILES/vim/ .vim
-ln -sh $DOTFILES/vimrc .vimrc
+ln -sh $DOTFILES/zshrc $HOME/.zshrc
+ln -sh $DOTFILES/vim/ $HOME/.vim
+ln -sh $DOTFILES/vimrc $HOME/.vimrc
+ln -s $HOME/Documents/bin $HOME/bin
