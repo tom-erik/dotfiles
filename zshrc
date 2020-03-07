@@ -57,6 +57,11 @@ source $ZSH/oh-my-zsh.sh
 
 # User configuration
 
+# ssh
+export SSH_KEY_PATH="~/.ssh/rsa_id"
+
+export PROJECT_HOME=$HOME/Developer
+export GITHUB_USER=tom-erik@safeconsult.no
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
