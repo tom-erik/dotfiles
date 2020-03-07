@@ -1,5 +1,5 @@
 # If you come from bash you might have to change your $PATH.
-# export PATH=$HOME/bin:/usr/local/bin:$PATH
+export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH=/Users/tom-erik/.oh-my-zsh
@@ -62,6 +62,7 @@ export SSH_KEY_PATH="~/.ssh/rsa_id"
 
 export PROJECT_HOME=$HOME/Developer
 export GITHUB_USER=tom-erik@safeconsult.no
+
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
@@ -95,4 +96,10 @@ alias s="du -hs * | sort -rh | head -5"
  # Search your history for something, with colorized output
 alias hs="history | grep"
 
-test -f "/usr/local/bin/virtualenvwrapper.sh" && source /usr/local/bin/virtualenvwrapper.sh
+# test -f "/usr/local/bin/virtualenvwrapper.sh" && source /usr/local/bin/virtualenvwrapper.sh
+
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+if command -v pyenv 1>/dev/null 2>&1; then
+  eval "$(pyenv init -)"
+fi
