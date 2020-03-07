@@ -92,4 +92,7 @@ alias gip="curl ipinfo.io/ip && curl ipinfo.io/org"
 # what is taking up disk space
 alias s="du -hs * | sort -rh | head -5"
 
+ # Search your history for something, with colorized output
+alias hs="history | grep"
+
 test -f "/usr/local/bin/virtualenvwrapper.sh" && source /usr/local/bin/virtualenvwrapper.sh
