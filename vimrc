@@ -191,7 +191,9 @@ let g:syntastic_auto_loc_list = 1
 set complete+=kspell
 
 " Always use vertical diffs
-set diffopt+=vertical
+if &diff
+   set diffopt+=vertical
+endif
 
 " Toggle paste mode
 nmap <silent> <F4> :set invpaste<CR>:set paste?<CR>
