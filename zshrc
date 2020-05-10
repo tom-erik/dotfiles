@@ -2,12 +2,13 @@
 export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
-export ZSH=/Users/tom-erik/.oh-my-zsh
+export ZSH=$HOME/.oh-my-zsh
 
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="pygmalion"
+ZSH_THEME="agnoster"
+#ZSH_THEME="pygmalion"
 
 # Uncomment the following line to use case-sensitive completion.
 # CASE_SENSITIVE="true"
@@ -34,6 +35,13 @@ ZSH_THEME="pygmalion"
 # Uncomment the following line to display red dots whilst waiting for completion.
 COMPLETION_WAITING_DOTS="true"
 
+HISTCONTROL=ignoredups:ignorespace
+
+typeset -A ZSH_HIGHLIGHT_PATTERNS
+ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern root cursor)
+ZSH_HIGHLIGHT_PATTERNS+=('rm -rf *' 'fg=white,bold,bg=red')
+
+
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
 # much, much faster.
@@ -51,7 +59,7 @@ COMPLETION_WAITING_DOTS="true"
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git github sublime z history)
+plugins=(git github sublime z history command-not-found fzf npm zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -62,6 +70,7 @@ export SSH_KEY_PATH="~/.ssh/rsa_id"
 
 export PROJECT_HOME=$HOME/Developer
 export GITHUB_USER=tom-erik@safeconsult.no
+export DEFAULT_USER=tom-erik
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
@@ -80,26 +89,20 @@ fi
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
-function pretty_tsv {
-    perl -pe 's/((?<=\t)|(?<=^))\t/ \t/g;' "$@" | column -t -s $'\t' | less  -F -S -X -K
-}
-
 # type f to find things by name
-alias f="find . -name"
-
-# get current ip and isp
-alias gip="curl ipinfo.io/ip && curl ipinfo.io/org"
-
-# what is taking up disk space
-alias s="du -hs * | sort -rh | head -5"
-
- # Search your history for something, with colorized output
-alias hs="history | grep"
-
 # test -f "/usr/local/bin/virtualenvwrapper.sh" && source /usr/local/bin/virtualenvwrapper.sh
+
+if [ -e $HOME/.bash_functions ]; then
+    source $HOME/.bash_functions
+fi
+
+if [ -e $HOME/.bash_aliases ]; then
+    source $HOME/.bash_aliases
+fi
 
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
+
 if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi

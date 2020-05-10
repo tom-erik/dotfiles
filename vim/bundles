@@ -35,6 +35,13 @@ Plug 'mustache/vim-mustache-handlebars'
 "Plug 'sirver/ultisnips'
 Plug 'davidoc/taskpaper.vim'
 
+Plug 'junegunn/fzf', { 'do': { -> fzf#install() } }
+Plug 'junegunn/fzf.vim'
+Plug 'https://github.com/alok/notational-fzf-vim'
+
+
+Plug 'itspriddle/vim-marked'
+
 if filereadable(expand("~/.vimrc.bundles.local"))
   source ~/.vimrc.bundles.local
 endif

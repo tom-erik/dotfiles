@@ -1,4 +1,5 @@
 set nocompatible
+let mapleader = ","
 
 "call pathogen#infect()
 
@@ -144,6 +145,8 @@ let NERDTreeIgnore=['\~$', '\.pyc$', '\.swp$']
 let NERDTreeShowBookmarks=1
 let NERDTreeWinPos="right"
 
+let g:netrw_list_hide= '^\.git/$,^\.DS_Store$'
+let g:netrw_sizestyle="h"
 
 ""
 "" General Mappings (Normal, Visual, Operator-pending)
@@ -152,20 +155,11 @@ let NERDTreeWinPos="right"
 " Exclude Javascript files in :Rtags via rails.vim due to warnings when parsing
 let g:Tlist_Ctags_Cmd="ctags --exclude='*.js'"
 
-" Index ctags from any project, including those outside Rails
+" Index ctags from any project
 map <Leader>ct :!ctags -R .<CR>
 
 " Switch between the last two files
 nnoremap <leader><leader> <c-^>
-
-" Get off my lawn
-nnoremap <Left> :echoe "Use h"<CR>
-nnoremap <Right> :echoe "Use l"<CR>
-
-" vim-rspec mappings
-nnoremap <Leader>t :call RunCurrentSpecFile()<CR>
-nnoremap <Leader>s :call RunNearestSpec()<CR>
-nnoremap <Leader>l :call RunLastSpec()<CR>
 
 " Run commands that require an interactive shell
 nnoremap <Leader>r :RunInInteractiveShell<space>
@@ -189,6 +183,12 @@ let g:syntastic_auto_loc_list = 1
 
 " Autocomplete with dictionary words when spell check is on
 set complete+=kspell
+
+" Settings for notational-fzf
+" https://github.com/Alok/notational-fzf-vim
+let g:nv_search_paths = ['~/Documents/notes', '~/Documents/misc.md']
+nnoremap <silent> <c-s> :NV<CR>
+
 
 " Always use vertical diffs
 if &diff
@@ -359,7 +359,9 @@ endif
 " After whitespace, insert the current directory into a command-line path
 cnoremap <expr> <C-P> getcmdline()[getcmdpos()-2] ==# ' ' ? expand('%:p:h') : "\<C-P>"
 
-colorscheme molokai
+" colorscheme molokai
+set background=dark  
+colorscheme solarized
 
 " easy open file
 nnoremap <leader>o :CtrlP<cr>
