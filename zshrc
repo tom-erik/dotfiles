@@ -41,6 +41,8 @@ typeset -A ZSH_HIGHLIGHT_PATTERNS
 ZSH_HIGHLIGHT_HIGHLIGHTERS=(main brackets pattern root cursor)
 ZSH_HIGHLIGHT_PATTERNS+=('rm -rf *' 'fg=white,bold,bg=red')
 
+export FZF_DEFAULT_COMMAND='rg --files --hidden --smart-case --follow --glob "!.git/*"'
+
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
@@ -59,7 +61,7 @@ ZSH_HIGHLIGHT_PATTERNS+=('rm -rf *' 'fg=white,bold,bg=red')
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git github sublime z history command-not-found fzf npm zsh-syntax-highlighting)
+plugins=(git github sublime z history command-not-found fzf npm zsh-completions zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
