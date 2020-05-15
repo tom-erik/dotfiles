@@ -37,7 +37,7 @@ set relativenumber
 set signcolumn=yes
 
 set numberwidth=5
-" set colorcolumn=50,72,88
+set colorcolumn=72,88,120
 set cursorline
 set autoread
 set nobackup
@@ -243,6 +243,12 @@ nnoremap <leader>o :Files<cr>
 " Switch between the last two files
 nnoremap <leader><leader> <c-^>
 
+" tab and shift+tab to indent and de-indent
+nnoremap <Tab>   >>
+nnoremap <S-Tab> <<
+vnoremap <Tab>   >><Esc>gv
+vnoremap <S-Tab> <<<Esc>gv
+
 "==================================================
 " MacVim
 "-------------------------
@@ -265,7 +271,7 @@ autocmd BufWritePre *.html execute ':Prettier'
 autocmd BufWritePre *.scss execute ':Prettier'
 
 " notational-fzf 
-let g:nv_search_paths = ['~/Documents/notes', '~/Documents/misc.md']
+let g:nv_search_paths = ['~/notes', '~/Documents/misc.md']
 nnoremap <silent> <c-s> :NV<CR>
 
 " Use fzf instead of Ctrl-p

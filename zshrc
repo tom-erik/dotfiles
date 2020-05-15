@@ -66,20 +66,22 @@ plugins=(git github sublime z history command-not-found fzf npm zsh-completions 
 source $ZSH/oh-my-zsh.sh
 
 # User configuration
-
-# ssh
-export SSH_KEY_PATH="~/.ssh/rsa_id"
-
 export PROJECT_HOME=$HOME/Developer
 export GITHUB_USER=tom-erik@safeconsult.no
 export DEFAULT_USER=tom-erik
+
+# prevent sharing shell history between different windows (enabled by default in OMZ)
+unsetopt SHARE_HISTORY
+# unset INC_APPEND_HISTORY
+
+# ssh
+export SSH_KEY_PATH="~/.ssh/rsa_id"
 
 # export MANPATH="/usr/local/man:$MANPATH"
 
 # You may need to manually set your language environment
 # export LANG=en_US.UTF-8
 
-unset INC_APPEND_HISTORY
 
 # Preferred editor for local and remote sessions
 if [[ -n $SSH_CONNECTION ]]; then
@@ -91,7 +93,6 @@ fi
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
-# type f to find things by name
 # test -f "/usr/local/bin/virtualenvwrapper.sh" && source /usr/local/bin/virtualenvwrapper.sh
 
 if [ -e $HOME/.bash_functions ]; then
@@ -108,3 +109,6 @@ export PATH="$PYENV_ROOT/bin:$PATH"
 if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi
+
+test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+

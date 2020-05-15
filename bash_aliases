@@ -1,6 +1,7 @@
 alias f="find . -name"
 
 # get current ip and isp
+
 alias gip="curl ipinfo.io/ip && curl ipinfo.io/org"
 
 # sort by size
@@ -19,3 +20,5 @@ alias left='ls -t -1'
 alias ve='python3 -m venv ./venv'
 alias va='source ./venv/bin/activate'
 
+# Cat with syntax highlightinh
+alias ccat='pygmentize -O style=monokai -f console256 -g'
