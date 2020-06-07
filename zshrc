@@ -87,7 +87,7 @@ export SSH_KEY_PATH="~/.ssh/rsa_id"
 if [[ -n $SSH_CONNECTION ]]; then
   export EDITOR='vim'
 else
-  export EDITOR='vim'
+  export EDITOR='nvim'
 fi
 
 # Compilation flags
@@ -109,6 +109,9 @@ export PATH="$PYENV_ROOT/bin:$PATH"
 if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi
+
+autoload bashcompinit && bashcompinit
+complete -C '/usr/local/bin/aws_completer' aws
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 

@@ -26,7 +26,9 @@ Plug 'w0rp/ale'
 
 Plug 'https://github.com/alok/notational-fzf-vim'
 Plug 'itspriddle/vim-marked'
-Plug 'rakr/vim-one'
+Plug 'joshdick/onedark.vim'
+Plug 'neoclide/coc.nvim', {'branch': 'release'}
+Plug 'OmniSharp/omnisharp-vim'
 
 call plug#end()
 
@@ -40,13 +42,33 @@ set numberwidth=5
 set colorcolumn=72,88,120
 set cursorline
 set autoread
-set nobackup
-set nowritebackup
 set ruler         " show the cursor position all the time
 set showcmd       " display incomplete commands
 set autowrite     " Automatically :write before running commands
 set nowrap
 set noerrorbells visualbell t_vb=
+
+" Backup and swap
+set nobackup
+set nowritebackup
+
+set directory=~/.vim/tmp/swap//
+set undodir=~/.vim/tmp/undo//
+set backupdir=~/.vim/tmp/backup//
+
+" Make those folders automatically if they don't already exist.
+if !isdirectory(expand(&undodir))
+    call mkdir(expand(&undodir), "p")
+endif
+if !isdirectory(expand(&backupdir))
+    call mkdir(expand(&backupdir), "p")
+endif
+if !isdirectory(expand(&directory))
+    call mkdir(expand(&directory), "p")
+endif
+
+" Don't try to highlight lines longer than 800 characters.
+set synmaxcol=800
 
 ""
 "" Whitespace
@@ -54,26 +76,21 @@ set noerrorbells visualbell t_vb=
 
 set expandtab                     " use spaces, not tabs
 set shiftwidth=2                  " an autoindent (with <<) is three spaces
-set tabstop=2                     " a tab is three spaces
+set tabstop=2                     " a tab is two spaces
 set smarttab
+set wrap
+set textwidth=80
+set formatoptions=qrn1j
 
 set autoindent
 set nosmartindent
 
-set scrolloff=15
-
+set listchars=nbsp:·,tab:▸\ ,eol:¬,extends:❯,precedes:❮,trail:·
 set list                          " Show invisible characters
+set showbreak=↪
 
 set backspace=indent,eol,start " make backspace work like most other apps
-
-""
-"" Searching
-""
-
-set hlsearch    " highlight matches
-set incsearch   " incremental searching
-set ignorecase  " searches are case insensitive...
-set smartcase   " ... unless they contain at least one capital letter
+set nojoinspaces                      " 1 space, not 2, when joining sentences.
 
 ""
 "" Wild settings
@@ -82,26 +99,25 @@ set smartcase   " ... unless they contain at least one capital letter
 set wildmode=longest,list,full
 set wildmenu
 
-" Disable output and VCS files
-set wildignore+=*.o,*.out,*.obj,.git,*.rbc,*.rbo,*.class,.svn,*.gem
+set wildignore+=.hg,.git,.svn                    " Version control
+
+set wildignore+=*.aux,*.out,*.toc                " LaTeX intermediate files
+set wildignore+=*.jpg,*.bmp,*.gif,*.png,*.jpeg   " binary images
 
 " Disable archive files
 set wildignore+=*.zip,*.tar.gz,*.tar.bz2,*.rar,*.tar.xz
 
 " Ignore bundler and sass cache
-set wildignore+=*/vendor/gems/*,*/vendor/cache/*,*/.bundle/*,*/.sass-cache/*
-
-" Ignore librarian-chef, vagrant, test-kitchen and Berkshelf cache
-set wildignore+=*/tmp/librarian/*,*/.vagrant/*,*/.kitchen/*,*/vendor/cookbooks/*
-
-" Ignore rails temporary asset caches
-set wildignore+=*/tmp/cache/assets/*/sprockets/*,*/tmp/cache/assets/*/sass/*
+set wildignore+=*/vendor/gems/*,*/vendor/cache/*,*/.bundle/*,*/.sass-cache/*,node_modules
 
 " Ignore c# output folders
 set wildignore+=*/bin/*,*/obj/*
 
 " Disable temp and backup files
 set wildignore+=*.swp,*~,._*
+
+" Disable OSX
+set wildignore+=*.DS_Store
 
 ""
 "" Statusline
@@ -115,19 +131,103 @@ if has("statusline") && !&cp
   set statusline+=\ %{fugitive#head()}
   set statusline+=%#warningmsg#
   set statusline+=%{SyntasticStatuslineFlag()}
+  set statusline+=%{coc#status()}%{get(b:,'coc_current_function','')}
   set statusline+=%*%=                 " left-right separation point
   set statusline+=\ %l/%L[%p%%] " current line/total lines
   set statusline+=\ %v[0x%B]    " current char [hex char]
 endif
 
+" COC -------------------------------------------------------------- {{{
+let g:OmniSharp_server_use_mono = 1
+set cmdheight=2
+" Having longer updatetime (default is 4000 ms = 4 s) leads to noticeable
+" delays and poor user experience.
+set updatetime=300
+
+" Don't pass messages to |ins-completion-menu|.
+set shortmess+=c
+
+" Always show the signcolumn, otherwise it would shift the text each time
+" diagnostics appear/become resolved.
+if has("patch-8.1.1564")
+  " Recently vim can merge signcolumn and number column into one
+  set signcolumn=number
+else
+  set signcolumn=yes
+endif
+
+" Use tab for trigger completion with characters ahead and navigate.
+" NOTE: Use command ':verbose imap <tab>' to make sure tab is not mapped by
+" other plugin before putting this into your config.
+inoremap <silent><expr> <TAB>
+      \ pumvisible() ? "\<C-n>" :
+      \ <SID>check_back_space() ? "\<TAB>" :
+      \ coc#refresh()
+inoremap <expr><S-TAB> pumvisible() ? "\<C-p>" : "\<C-h>"
+
+function! s:check_back_space() abort
+  let col = col('.') - 1
+  return !col || getline('.')[col - 1]  =~# '\s'
+endfunction
+
+" Use <c-space> to trigger completion.
+inoremap <silent><expr> <c-space> coc#refresh()
+
+" Use <cr> to confirm completion, `<C-g>u` means break undo chain at current
+" position. Coc only does snippet and additional edit on confirm.
+" <cr> could be remapped by other vim plugin, try `:verbose imap <CR>`.
+if exists('*complete_info')
+  inoremap <expr> <cr> complete_info()["selected"] != "-1" ? "\<C-y>" : "\<C-g>u\<CR>"
+else
+  inoremap <expr> <cr> pumvisible() ? "\<C-y>" : "\<C-g>u\<CR>"
+endif
+
+" Use `[g` and `]g` to navigate diagnostics
+nmap <silent> [g <Plug>(coc-diagnostic-prev)
+nmap <silent> ]g <Plug>(coc-diagnostic-next)
+
+" GoTo code navigation.
+nmap <silent> gd <Plug>(coc-definition)
+nmap <silent> gy <Plug>(coc-type-definition)
+nmap <silent> gi <Plug>(coc-implementation)
+nmap <silent> gr <Plug>(coc-references)
+
+" Use K to show documentation in preview window.
+nnoremap <silent> K :call <SID>show_documentation()<CR>
+
+function! s:show_documentation()
+  if (index(['vim','help'], &filetype) >= 0)
+    execute 'h '.expand('<cword>')
+  else
+    call CocAction('doHover')
+  endif
+endfunction
+
+" Highlight the symbol and its references when holding the cursor.
+autocmd CursorHold * silent call CocActionAsync('highlight')
+
+" Symbol renaming.
+nmap <leader>rn <Plug>(coc-rename)
+
+" Formatting selected code.
+xmap <leader>f  <Plug>(coc-format-selected)
+nmap <leader>f  <Plug>(coc-format-selected)
+" }}}
+
 augroup vimrcEx
   autocmd!
+
+  " Save when losing focus
+  autocmd FocusLost * :silent! wall
+
+  " Resize splits when the window is resized
+  autocmd VimResized * :wincmd 
 
   " When editing a file, always jump to the last known cursor position.
   " Don't do it for commit messages, when the position is invalid, or when
   " inside an event handler (happens when dropping a file on gvim).
   autocmd BufReadPost *
-    \ if &ft != 'gitcommit' && line("'\"") > 0 && line("'\"") <= line("$") |
+    \ if &ft != 'commit' && line("'\"") > 0 && line("'\"") <= line("$") |
     \   exe "normal g`\"" |
     \ endif
 
@@ -143,7 +243,7 @@ augroup vimrcEx
   autocmd BufRead,BufNewFile *.md setlocal textwidth=80
 
   " Automatically wrap at 72 characters and spell check git commit messages
-  autocmd FileType gitcommit setlocal textwidth=72 spell spelllang=en
+  autocmd FileType commit setlocal textwidth=72 spell spelllang=en
 
   " Allow stylesheets to autocomplete hyphenated words
   autocmd FileType css,scss,sass setlocal iskeyword+=-
@@ -152,8 +252,11 @@ augroup vimrcEx
   autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif " Close vim if the only window left open is a NERDTree
 augroup END
 
-" Display extra whitespace
-set list listchars=tab:»·
+augroup cline
+    au!
+    au WinLeave,InsertEnter * set nocursorline
+    au WinEnter,InsertLeave * set cursorline
+augroup END
 
 let g:netrw_list_hide= '^\.git/$,^\.DS_Store$'
 let g:netrw_sizestyle="h"
@@ -168,17 +271,36 @@ let g:netrw_liststyle = 3 "tree style listing
 set splitbelow
 set splitright
 
-" Set spellfile to location that is guaranteed to exist, can be symlinked to
-" Dropbox or kept in Git and managed outside of thoughtbot/dotfiles using rcm.
-" set spellfile=$HOME/.vim-spell-en.utf-8.add
+" Spelling
+"
+" There are three dictionaries I use for spellchecking:
+"
+"   /usr/share/dict/words
+"   Basic stuff.
+"
+"   ~/.vim/custom-dictionary.utf-8.add
+"   Custom words (like my name).  This is in my (version-controlled) dotfiles.
+"
+"   ~/.vim-local-dictionary.utf-8.add
+"   More custom words.  This is *not* version controlled, so I can stick
+"   work stuff in here without leaking internal names and shit.
+"
+" I also remap zG to add to the local dict (vanilla zG is useless anyway).
+" set dictionary=/usr/share/dict/words
+set spellfile=~/.vim/custom-dictionary.utf-8.add,~/.vim-local-dictionary.utf-8.add
+nnoremap zG 2zg
 
 " Autocomplete with dictionary words when spell check is on
 set complete+=kspell
+set complete=.,w,b,u,t
+set completeopt=longest,menuone
 
 " Always use vertical diffs
 if &diff
    set diffopt+=vertical
 endif
+
+set mouse=a
 
 " Toggle paste mode
 nmap <silent> <F4> :set invpaste<CR>:set paste?<CR>
@@ -210,19 +332,62 @@ map <Up> gk
 nnoremap <CR> :noh<CR><CR>
 nmap <leader>hs :set hlsearch! hlsearch?<CR>
 
-set termguicolors
-set background=dark  
-colorscheme one
+" Colors 
 
-" system clipboard
-vmap <Leader>y "+y
-set clipboard=unnamed
+"Use 24-bit (true-color) mode in Vim/Neovim when outside tmux.
+"If you're using tmux version 2.2 or later, you can remove the outermost $TMUX check and use tmux's 24-bit color support
+"(see < http://sunaku.github.io/tmux-24bit-color.html#usage > for more information.)
+if (empty($TMUX))
+  if (has("nvim"))
+    "For Neovim 0.1.3 and 0.1.4 < https://github.com/neovim/neovim/pull/2198 >
+    let $NVIM_TUI_ENABLE_TRUE_COLOR=1
+    let $NVIM_TUI_ENABLE_CURSOR_SHAPE=1
+  endif
+  "For Neovim > 0.1.5 and Vim > patch 7.4.1799 < https://github.com/vim/vim/commit/61be73bb0f965a895bfb064ea3e55476ac175162 >
+  "Based on Vim patch 7.4.1770 (`guicolors` option) < https://github.com/vim/vim/commit/8a633e3427b47286869aa4b96f2bfc1fe65b25cd >
+  " < https://github.com/neovim/neovim/wiki/Following-HEAD#20160511 >
+  if (has("termguicolors"))
+    set termguicolors
+  endif
+endif
+
+colorscheme onedark
+set background=dark  
+hi StatusLine guibg=#be5046
+set guifont=Menlo:h14
+
+" Convenience mappings ---------------------------------------------------- {{{
+
+" Copying/pasting text to the system clipboard.
+noremap  <leader>p "+p
+vnoremap <leader>y "+y
+nnoremap <leader>y VV"+y
+nnoremap <leader>Y "+y
 
 " select line
 nmap <space><space> V
 
+" Man
+nnoremap M K
+
+" Yank to end of line
+nnoremap Y y$
+
+" Reselect last-pasted text
+nnoremap gv `[v`]
+
+" Substitute
+nnoremap <c-s> :%s/
+vnoremap <c-s> :s/
+
+" Open current directory in Finder
+nnoremap <leader>O :!open .<cr>
+
 " necessary for incessant Vim config updates
 nnoremap <Leader>ss :source $MYVIMRC<CR>
+
+" follow tag, easier for Norwegian keyboard
+nnoremap t <C-]>
 
 " better movement between splits
 nnoremap <C-j> <C-w>j
@@ -231,13 +396,24 @@ nnoremap <C-h> <C-w>h
 nnoremap <C-l> <C-w>l
 
 " Adjust viewports to the same size
-map <Leader>= <C-w>=
+nnoremap - <C-w>=
 
 " saving and quitting are very common commands
-nnoremap <Leader>w :write<CR>
-nnoremap <Leader>q :quit<CR>
-nnoremap <Leader>x :xit<CR>
-nnoremap <Leader>e :edit<CR>
+
+" Hit S in command mode to save, as :w<CR> is a mouthful and MacVim
+" Command-S is a bad habit when using terminal Vim.
+" We overload a command, but use 'cc' for that anyway.
+noremap S :w<CR>
+
+" Make Q useful and avoid the confusing Ex mode.
+noremap Q <nop>
+" Close window.
+noremap QQ :q<CR>
+" Close a full tab page.
+noremap QW :windo bd<CR>
+" Close all.
+noremap QA :qa<CR>
+
 nnoremap <leader>o :Files<cr>
 
 " Switch between the last two files
@@ -249,13 +425,209 @@ nnoremap <S-Tab> <<
 vnoremap <Tab>   >><Esc>gv
 vnoremap <S-Tab> <<<Esc>gv
 
-"==================================================
-" MacVim
-"-------------------------
-set guifont=Menlo:h14
-if has("gui_macvim")
-    set lines=75 columns=120
-endif
+" Toggle line numbers
+nnoremap <leader>n :setlocal number!<cr>
+
+" Sort lines
+nnoremap <leader>s vip:sort<cr>
+vnoremap <leader>s :sort<cr>
+
+" Tabs
+noremap <S-Left> :tabp<CR>
+noremap <S-Right> :tabn<CR>
+
+" Ack/Quickfix windows
+map <leader>q :cclose<CR>
+" Center line on previous/next fix.
+map - :cprev<CR> zz
+map + :cnext<CR> zz
+" Center line in previous/next file.
+map g- :cpfile<CR> zz
+map g+ :cnfile<CR> zz
+
+" Create a split on the given side.
+" From http://technotales.wordpress.com/2010/04/29/vim-splits-a-guide-to-doing-exactly-what-you-want/ via joakimk.
+nmap <leader><left>   :leftabove  vsp<CR>
+nmap <leader><right>  :rightbelow vsp<CR>
+nmap <leader><up>     :leftabove  sp<CR>
+nmap <leader><down>   :rightbelow sp<CR>
+
+cmap %% <C-R>=expand("%:h") . "/" <CR>
+" }}}
+
+" Window Resizing {{{
+" right/up : bigger
+" left/down : smaller
+nnoremap <m-right> :vertical resize +3<cr>
+nnoremap <m-left> :vertical resize -3<cr>
+nnoremap <m-up> :resize +3<cr>
+nnoremap <m-down> :resize -3<cr>
+" }}}
+
+" Quick editing ----------------------------------------------------------- {{{
+
+nnoremap <leader>ed :vsplit ~/.vim/custom-dictionary.utf-8.add<cr>
+nnoremap <leader>eg :vsplit ~/.gitconfig<cr>
+nnoremap <leader>ev :vsplit ~/.vimrc<cr>
+nnoremap <leader>ez :vsplit ~/.zshrc<cr>
+
+
+" }}}
+
+" Searching and movement -------------------------------------------------- {{{
+
+" Use sane regexes.
+nnoremap / /\v
+vnoremap / /\v
+
+set ignorecase
+set smartcase
+set incsearch
+set showmatch
+set hlsearch
+set gdefault
+
+set scrolloff=15
+set sidescroll=1
+set sidescrolloff=10
+
+set virtualedit+=block
+
+" Made D behave
+nnoremap D d$
+
+" Don't move on *
+" I'd use a function for this but Vim clobbers the last search when you're in
+" a function so fuck it, practicality beats purity.
+nnoremap <silent> * :let stay_star_view = winsaveview()<cr>*:call winrestview(stay_star_view)<cr>
+
+" Keep search matches in the middle of the window.
+nnoremap n nzzzv
+nnoremap N Nzzzv
+
+" Same when jumping around
+nnoremap g; g;zz
+nnoremap g, g,zz
+nnoremap <c-o> <c-o>zz
+
+" Easier to type, and I never use the default behavior.
+noremap H ^
+noremap L $
+vnoremap L g_
+
+" Heresy
+inoremap <c-a> <esc>I
+inoremap <c-e> <esc>A
+cnoremap <c-a> <home>
+cnoremap <c-e> <end>
+
+" gi already moves to "last place you exited insert mode", so we'll map gI to
+" something similar: move to last change
+nnoremap gI `.
+
+" Fix linewise visual selection of various text objects
+nnoremap VV V
+nnoremap Vit vitVkoj
+nnoremap Vat vatV
+nnoremap Vab vabV
+nnoremap VaB vaBV
+
+" Directional Keys {{{
+
+" It's 2013.
+noremap j gj
+noremap k gk
+noremap gj j
+noremap gk k
+
+noremap <leader>v <C-w>v
+
+" }}}
+
+" List navigation {{{
+
+nnoremap <left>  :cprev<cr>zvzz
+nnoremap <right> :cnext<cr>zvzz
+nnoremap <up>    :lprev<cr>zvzz
+nnoremap <down>  :lnext<cr>zvzz
+
+" }}}
+
+" NERD Tree {{{
+
+noremap  <F2> :NERDTreeToggle<cr>
+inoremap <F2> <esc>:NERDTreeToggle<cr>
+noremap  <S-F2> :NERDTreeFind<cr>
+inoremap <S-F2> <esc>:NERDTreeFind<cr>
+
+augroup ps_nerdtree
+    au!
+
+    au Filetype nerdtree setlocal nolist
+    au Filetype nerdtree nnoremap <buffer> H :vertical resize -10<cr>
+    au Filetype nerdtree nnoremap <buffer> L :vertical resize +10<cr>
+    " au Filetype nerdtree nnoremap <buffer> K :q<cr>
+augroup END
+
+let NERDTreeHighlightCursorline = 1
+let NERDTreeIgnore = ['\~$', '.*\.pyc$', 'pip-log\.txt$', 'whoosh_index',
+                    \ '.*\.o$', 'db.db', 'tags.bak', '.*\.pdf$', '.*\.mid$',
+                    \ '^tags$']
+
+let NERDTreeMinimalUI = 1
+let NERDTreeDirArrows = 1
+let NERDChristmasTree = 1
+let NERDTreeChDirMode = 2
+let NERDTreeMapJumpFirstChild = 'gK'
+
+" }}}
+
+" Vim {{{
+
+augroup ft_vim
+    au!
+
+    au FileType vim setlocal foldmethod=marker keywordprg=:help
+    au FileType help setlocal textwidth=78
+    au BufWinEnter *.txt if &ft == 'help' | wincmd L | endif
+
+    au FileType vim vnoremap <localleader>S y:@"<CR>
+    au FileType vim nnoremap <localleader>S ^vg_y:execute @@<cr>:echo 'Sourced line.'<cr>
+
+    au FileType vim inoremap <c-n> <c-x><c-n>
+augroup END
+
+" }}}
+
+" XML {{{
+
+augroup ft_xml
+    au!
+
+    au FileType xml setlocal foldmethod=manual
+
+    " Use <localleader>f to fold the current tag.
+    au FileType xml nnoremap <buffer> <localleader>f Vatzf
+
+    " Indent tag
+    au FileType xml nnoremap <buffer> <localleader>= Vat=
+augroup END
+
+" }}}
+
+" YAML {{{
+
+augroup ft_yaml
+    au!
+
+    au FileType yaml set shiftwidth=2
+augroup END
+
+" }}}
+"
+" "Hub"
+vnoremap <leader>H :Gbrowse<cr>
+nnoremap <leader>H V:Gbrowse<cr>
 
 "==================================================
 " Plugin config
@@ -272,11 +644,12 @@ autocmd BufWritePre *.scss execute ':Prettier'
 
 " notational-fzf 
 let g:nv_search_paths = ['~/notes', '~/Documents/misc.md']
-nnoremap <silent> <c-s> :NV<CR>
 
 " Use fzf instead of Ctrl-p
-nnoremap <C-p> :Files<Cr>
-nnoremap <C-g> :Rg<Cr>
+nnoremap <C-p> :Files<cr>
+nnoremap <C-g> :Rg<cr>
+nnoremap <C-b> :Buffers<cr>
+let g:fzf_history_dir = '~/.local/share/fzf-history'
 
 " Gitgutter
 let g:gitgutter_max_signs = 10000
