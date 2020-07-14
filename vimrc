@@ -219,8 +219,6 @@ if &diff
    set diffopt+=vertical
 endif
 
-set mouse=a
-
 " Toggle paste mode
 nmap <silent> <F4> :set invpaste<CR>:set paste?<CR>
 imap <silent> <F4> <ESC>:set invpaste<CR>:set paste?<CR>
@@ -272,7 +270,9 @@ endif
 
 colorscheme onedark
 set background=dark  
-hi StatusLine guibg=#be5046
+hi StatusLine guibg=#cf3030
+hi StatusLineNC guibg=#54211e guifg=#5dc1c6
+
 set guifont=Menlo:h14
 
 " Convenience mappings ---------------------------------------------------- {{{
