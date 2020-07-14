@@ -95,13 +95,11 @@ fi
 
 # test -f "/usr/local/bin/virtualenvwrapper.sh" && source /usr/local/bin/virtualenvwrapper.sh
 
-if [ -e $HOME/.bash_functions ]; then
-    source $HOME/.bash_functions
-fi
-
-if [ -e $HOME/.bash_aliases ]; then
-    source $HOME/.bash_aliases
-fi
+# Load any supplementary scripts
+for config in "$HOME"/.zshrc.d/*.bash ; do
+    source "$config"
+done
+unset -v config
 
 export PYENV_ROOT="$HOME/.pyenv"
 export PATH="$PYENV_ROOT/bin:$PATH"
@@ -110,6 +108,7 @@ if command -v pyenv 1>/dev/null 2>&1; then
   eval "$(pyenv init -)"
 fi
 
+autoload -U compinit && compinit -C
 autoload bashcompinit && bashcompinit
 complete -C '/usr/local/bin/aws_completer' aws
 
