@@ -465,8 +465,8 @@ noremap <leader>v <C-w>v
 
 " List navigation {{{
 
-nnoremap <left>  :cprev<cr>zvzz
-nnoremap <right> :cnext<cr>zvzz
+nnoremap <left>  :bprev<cr>zvzz
+nnoremap <right> :bnext<cr>zvzz
 nnoremap <up>    :lprev<cr>zvzz
 nnoremap <down>  :lnext<cr>zvzz
 
@@ -543,7 +543,24 @@ augroup ft_yaml
 augroup END
 
 " }}}
-"
+
+" YAML {{{
+
+augroup ft_python
+    au!
+
+    au BufNewFile,BufRead *.py
+    \ setlocal tabstop=4
+    \ softtabstop=4
+    \ shiftwidth=4
+    \ textwidth=79
+    \ expandtab
+    \ autoindent
+    \ fileformat=unix
+augroup END
+
+" }}}
+
 " "Hub"
 vnoremap <leader>H :Gbrowse<cr>
 nnoremap <leader>H V:Gbrowse<cr>
