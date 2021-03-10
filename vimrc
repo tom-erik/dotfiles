@@ -22,11 +22,15 @@ Plug 'tpope/vim-fugitive'
 Plug 'tpope/vim-markdown'
 
 Plug 'davidoc/taskpaper.vim'
-Plug 'w0rp/ale'
+"Plug 'w0rp/ale'
 
 Plug 'https://github.com/alok/notational-fzf-vim'
 Plug 'itspriddle/vim-marked'
 Plug 'joshdick/onedark.vim'
+Plug 'sheerun/vim-polyglot'
+Plug 'OmniSharp/omnisharp-vim'
+Plug 'ervandew/supertab'
+Plug 'nickspoons/vim-sharpenup'
 
 call plug#end()
 
@@ -155,9 +159,6 @@ augroup vimrcEx
   autocmd BufRead,BufNewFile *.md set filetype=markdown
   autocmd BufRead,BufNewFile todo.txt set filetype=taskpaper
 
-  " Enable spellchecking for Markdown
-  autocmd FileType markdown,mail setlocal spell
-
   " Automatically wrap at 80 characters for Markdown
   autocmd BufRead,BufNewFile *.md setlocal textwidth=80
 
@@ -169,6 +170,17 @@ augroup vimrcEx
 
 "  autocmd vimenter * if !argc() | NERDTree | endif " Automatically open a NERDTree if no files where specified
   autocmd bufenter * if (winnr("$") == 1 && exists("b:NERDTreeType") && b:NERDTreeType == "primary") | q | endif " Close vim if the only window left open is a NERDTree
+
+    " spell correction on markdown files and mail (for mutt)
+  autocmd FileType mail,markdown setlocal spell
+  autocmd FileType mail,markdown setlocal wrap
+  autocmd FileType mail,markdown setlocal spelllang=en,nb
+
+  " special settings for writing emails, flowed text at 72 width
+  autocmd FileType mail setlocal textwidth=72
+  autocmd FileType mail setlocal comments+=nb:>
+  autocmd FileType mail setlocal formatoptions+=awq
+  autocmd BufNewFile,BufRead neomutt-* set ft=mail
 augroup END
 
 augroup cline
@@ -270,12 +282,22 @@ endif
 
 colorscheme onedark
 set background=dark  
-hi StatusLine guibg=#cf3030
+hi StatusLine guibg=#be5046
 hi StatusLineNC guibg=#54211e guifg=#5dc1c6
-
 set guifont=Menlo:h14
 
+let g:OmniSharp_server_use_mono = 1
+
+
+
 " Convenience mappings ---------------------------------------------------- {{{
+
+" hitting jj in insert mode escapes
+inoremap jj <ESC>
+inoremap jk <ESC>
+
+" reload files when set autoread is active with F5
+nnoremap <F5> :checktime<CR>:redraw!<CR>
 
 " Copying/pasting text to the system clipboard.
 noremap  <leader>p "+p
@@ -326,6 +348,7 @@ noremap S :w<CR>
 
 " Make Q useful and avoid the confusing Ex mode.
 noremap Q <nop>
+
 " Close window.
 noremap QQ :q<CR>
 " Close a full tab page.
@@ -354,6 +377,10 @@ vnoremap <leader>s :sort<cr>
 " Tabs
 noremap <S-Left> :tabp<CR>
 noremap <S-Right> :tabn<CR>
+" Buffers
+
+noremap <Left> :bp<CR>
+noremap <Right> :bn<CR>
 
 " Ack/Quickfix windows
 map <leader>q :cclose<CR>
@@ -387,6 +414,7 @@ nnoremap <m-down> :resize -3<cr>
 
 nnoremap <leader>ed :vsplit ~/.vim/custom-dictionary.utf-8.add<cr>
 nnoremap <leader>eg :vsplit ~/.gitconfig<cr>
+nnoremap <leader>em :vsplit ~/.muttrc<cr>
 nnoremap <leader>ev :vsplit ~/.vimrc<cr>
 nnoremap <leader>ez :vsplit ~/.zshrc<cr>
 
@@ -465,8 +493,8 @@ noremap <leader>v <C-w>v
 
 " List navigation {{{
 
-nnoremap <left>  :bprev<cr>zvzz
-nnoremap <right> :bnext<cr>zvzz
+nnoremap <SM-left>  :cprev<cr>zvzz
+nnoremap <SM-right> :cnext<cr>zvzz
 nnoremap <up>    :lprev<cr>zvzz
 nnoremap <down>  :lnext<cr>zvzz
 
@@ -584,8 +612,16 @@ let g:nv_search_paths = ['~/notes', '~/Documents/misc.md']
 " Use fzf instead of Ctrl-p
 nnoremap <C-p> :Files<cr>
 nnoremap <C-g> :Rg<cr>
-nnoremap <C-b> :Buffers<cr>
+nnoremap <silent> <space>. :Buffers<cr>
+nnoremap <silent> <space>l :Lines<cr>
+nnoremap <silent> <space>a :Rg<cr>
+nnoremap <silent> <space>h :History:<cr>
 let g:fzf_history_dir = '~/.local/share/fzf-history'
+
+" fugitive
+nnoremap <silent> <leader>gs :G<CR><C-w>20+
+nnoremap <silent> <leader>gd :Gvdiff<CR><C-w>20+
+nnoremap <silent> <leader>gc :Gcommit<CR><C-w>20+
 
 " Gitgutter
 let g:gitgutter_max_signs = 10000

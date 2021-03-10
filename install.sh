@@ -1,18 +1,38 @@
 #!/usr/bin/env bash
 
-DOTFILES=$(pwd)
+set -e
 
-ln -sh $DOTFILES/zshrc $HOME/.zshrc
-ln -s $DOTFILES/zshrc.d $HOME/.zshrc.d
+EXPORT_DIR=$(dirname "$0")
+DOTS=(
+  zshrc
+  vimrc
+  gitignore_global
+)
 
-ln -sh $DOTFILES/vimrc $HOME/.vimrc
-ln -s $HOME/Documents/bin $HOME/bin
+command_exists () {
+  type "$1" &> /dev/null ;
+}
 
-git clone https://github.com/zsh-users/zsh-completions ${ZSH_CUSTOM:=~/.oh-my-zsh/custom}/plugins/zsh-completions
-git clone https://github.com/zsh-users/zsh-syntax-highlighting.git ${ZSH_CUSTOM:-~/.oh-my-zsh/custom}/plugins/zsh-syntax-highlighting
+link_dot() {
+    src=$1
+    dst=.$1
+    rm -f $dst
+    ln -s $EXPORT_DIR/$src $dst
+}
 
-curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
-    https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+cd $HOME
 
-brew install fzf
-brew install rg
+if [ ! -f ".vim/autoload/plug.vim" ]; then
+  curl -fLo ~/.vim/autoload/plug.vim --create-dirs \
+      https://raw.githubusercontent.com/junegunn/vim-plug/master/plug.vim
+fi
+
+for i in ${DOTS[@]}; do
+    link_dot $i
+done
+
+if [ ! -d "$HOME/bin" ]; then
+  ln -s $HOME/Documents/bin $HOME/bin
+fi
+
+git config --global core.excludesfile ~/.gitignore_global

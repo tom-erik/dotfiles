@@ -43,6 +43,12 @@ ZSH_HIGHLIGHT_PATTERNS+=('rm -rf *' 'fg=white,bold,bg=red')
 
 export FZF_DEFAULT_COMMAND='rg --files --hidden --smart-case --follow --glob "!.git/*"'
 
+# If you have installed hub using Homebrew, its completions may not be
+# on your $FPATH if you are using the system zsh
+# See https://github.com/ohmyzsh/ohmyzsh/tree/master/plugins/github
+if (( ! ${fpath[(I)/usr/local/share/zsh/site-functions]} )); then
+  FPATH=/usr/local/share/zsh/site-functions:$FPATH
+fi
 
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
@@ -61,7 +67,7 @@ export FZF_DEFAULT_COMMAND='rg --files --hidden --smart-case --follow --glob "!.
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=(git github sublime z history command-not-found fzf npm zsh-completions zsh-syntax-highlighting)
+plugins=( direnv git github z history fzf docker zsh-syntax-highlighting)
 
 source $ZSH/oh-my-zsh.sh
 
@@ -93,13 +99,10 @@ fi
 # Compilation flags
 # export ARCHFLAGS="-arch x86_64"
 
-# test -f "/usr/local/bin/virtualenvwrapper.sh" && source /usr/local/bin/virtualenvwrapper.sh
-
-# Load any supplementary scripts
-for config in "$HOME"/.zshrc.d/*.bash ; do
-    source "$config"
-done
-unset -v config
+export PYENV_ROOT="$HOME/.pyenv"
+export PATH="$PYENV_ROOT/bin:$PATH"
+export MAILDIR=~/mail
+export VAGRANT_DEFAULT_PROVIDER=vmware_desktop
 
 if command -v pyenv 1>/dev/null 2>&1; then
   export PYENV_ROOT="$HOME/.pyenv"
@@ -111,9 +114,116 @@ autoload -U compinit && compinit -C
 autoload bashcompinit && bashcompinit
 complete -C '/usr/local/bin/aws_completer' aws
 
-export NVM_DIR="$HOME/.nvm"
-[ -s "/usr/local/opt/nvm/nvm.sh" ] && . "/usr/local/opt/nvm/nvm.sh"  # This loads nvm
-[ -s "/usr/local/opt/nvm/etc/bash_completion.d/nvm" ] && . "/usr/local/opt/nvm/etc/bash_completion.d/nvm"  # This loads nvm bash_completion
+# export NVM_DIR="$HOME/.nvm"
+# [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+# Improve shell startup http://broken-by.me/lazy-load-nvm/
+nvm() {
+    unset -f nvm
+    export NVM_DIR=~/.nvm
+    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+    nvm "$@"
+}
+ 
+node() {
+    unset -f node
+    export NVM_DIR=~/.nvm
+    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+    node "$@"
+}
+ 
+npm() {
+    unset -f npm
+    export NVM_DIR=~/.nvm
+    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
+    npm "$@"
+}
 
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
 
+# Created by `userpath` on 2020-12-18 21:44:00
+export PATH="$PATH:$HOME/.local/bin"
+
+setopt PROMPT_SUBST
+
+# Required for direnv
+show_virtual_env() {
+  if [[ -n "$VIRTUAL_ENV" && -n "$DIRENV_DIR" ]]; then
+    echo "($(basename $VIRTUAL_ENV))"
+  fi
+}
+PS1='$(show_virtual_env)'$PS1
+
+
+##### ALIASES
+alias f="find . -name"
+
+# get current ip and isp
+alias gip="curl ipinfo.io/ip && curl ipinfo.io/org"
+
+# sort by size
+alias s="du -hs * | sort -rh"
+
+ # Search your history for something, with colorized output
+alias hs="history | grep"
+
+# List SafeConsult repos
+alias repos="hub api 'orgs/SafeConsult/repos?per_page=100' --paginate -t | awk '/\.full_name\\t/ {print $2}'"
+
+# Sort by modification time - show what I left off
+alias left='ls -t -1'
+
+# Create a Python virtual environment
+alias ve='python3 -m venv ./venv'
+alias va='source ./venv/bin/activate'
+
+# Cat with syntax highlightinh
+alias ccat='pygmentize -O style=monokai -f console256 -g'
+
+alias v=$EDITOR
+# mutt
+alias m='neomutt'
+# alias for syncing everything
+alias O="cd ~ && mbsync -a && mu index"
+
+# other often used stuff, mostly node/npm
+alias ns="npm start"
+alias nb="npm run build"
+alias npmre='rm -f package-lock.json && rm -rf node_modules && npm install'
+
+
+## FUNCTIONS
+function pretty_tsv {
+    perl -pe 's/((?<=\t)|(?<=^))\t/ \t/g;' "$@" | column -t -s $'\t' | less  -F -S -X -K
+}
+
+function cl() {
+    DIR="$*";
+        # if no DIR given, go home
+        if [ $# -lt 1 ]; then 
+                DIR=$HOME;
+    fi;
+    builtin cd "${DIR}" && \
+    # use your preferred ls command
+        ls -F
+}
+
+function zombie() {
+   ps aux | awk '{if ($8=="Z") { print $2 }}'
+}
+
+function npmls() {
+   npm ls --depth=0 "$@" 2>/dev/null
+}
+
+# fd - cd to selected directory
+fd() {
+  local dir
+  dir=$(find ${1:-.} -path '*/\.*' -prune \
+                  -o -type d -print 2> /dev/null | fzf +m) &&
+  cd "$dir"
+}
+
+# fh - search in your command history and execute selected command
+fh() {
+  eval $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//')
+}
