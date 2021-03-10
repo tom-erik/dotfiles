@@ -1,3 +1,1 @@
-vim/bundle/
-vim/.netrwhist
-zshrc.d/*.local.bash
+.DS_Store
