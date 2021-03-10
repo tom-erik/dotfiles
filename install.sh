@@ -77,6 +77,8 @@ main() {
   confirm_no_clobber
 
   install_plug
+  install_tmux
+  install_tmux_clipboard
   install_neovim
 
   for i in ${DOTS[@]}; do
@@ -100,6 +102,7 @@ EXPORT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
 DOTS=(
   zshrc
   vimrc
+  tmux.conf
   gitignore_global
 )
 
