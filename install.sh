@@ -35,4 +35,9 @@ if [ ! -d "$HOME/bin" ]; then
   ln -s "$HOME/Documents/bin" "$HOME/bin"
 fi
 
+if [ ! -d "$HOME/.vim/spell" ]; then
+  mkdir "$HOME/.vim/spell"
+  cp $EXPORT_DIR/spellfiles/* "$HOME/.vim/spell/"
+fi
+
 git config --global core.excludesfile ~/.gitignore_global
