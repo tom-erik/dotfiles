@@ -1,8 +1,8 @@
 #!/usr/bin/env bash
 
-set -e
+set -euxo pipefail
 
-EXPORT_DIR=$(dirname "$0")
+EXPORT_DIR=$(cd "$(dirname "${BASH_SOURCE[0]}")" &>/dev/null && pwd -P)
 DOTS=(
   zshrc
   vimrc
@@ -16,8 +16,8 @@ command_exists () {
 link_dot() {
     src=$1
     dst=.$1
-    rm -f $dst
-    ln -s $EXPORT_DIR/$src $dst
+    rm -f "$dst"
+    ln -s "$EXPORT_DIR/$src" "$dst"
 }
 
 cd $HOME
@@ -32,7 +32,7 @@ for i in ${DOTS[@]}; do
 done
 
 if [ ! -d "$HOME/bin" ]; then
-  ln -s $HOME/Documents/bin $HOME/bin
+  ln -s "$HOME/Documents/bin" "$HOME/bin"
 fi
 
 git config --global core.excludesfile ~/.gitignore_global
