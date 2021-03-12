@@ -97,7 +97,7 @@ set nojoinspaces                      " 1 space, not 2, when joining sentences.
 "" Wild settings
 ""
 
-set wildmode=longest,list,full
+set wildmode=longest,list:full
 set wildmenu
 
 set wildignore+=.hg,.git,.svn                    " Version control
@@ -140,9 +140,6 @@ endif
 augroup vimrcEx
   autocmd!
 
-  " Save when losing focus
-  autocmd FocusLost * :silent! wall
-
   " Resize splits when the window is resized
   autocmd VimResized * :wincmd 
 
@@ -150,9 +147,9 @@ augroup vimrcEx
   " Don't do it for commit messages, when the position is invalid, or when
   " inside an event handler (happens when dropping a file on gvim).
   autocmd BufReadPost *
-    \ if &ft != 'commit' && line("'\"") > 0 && line("'\"") <= line("$") |
-    \   exe "normal g`\"" |
-    \ endif
+      \ if &ft != 'gitcommit' && line("'\"") > 0 && line("'\"") <= line("$") |
+      \   exe "normal g`\"" |
+      \ endif
 
   " Set syntax highlighting for specific file types
 "  autocmd BufRead,BufNewFile Appraisals set filetype=ruby
@@ -163,7 +160,7 @@ augroup vimrcEx
   autocmd BufRead,BufNewFile *.md setlocal textwidth=80
 
   " Automatically wrap at 72 characters and spell check git commit messages
-  autocmd FileType commit setlocal textwidth=72 spell spelllang=en
+  autocmd FileType gitcommit setlocal textwidth=72 spell spelllang=en
 
   " Allow stylesheets to autocomplete hyphenated words
   autocmd FileType css,scss,sass setlocal iskeyword+=-
@@ -223,7 +220,6 @@ nnoremap zG 2zg
 
 " Autocomplete with dictionary words when spell check is on
 set complete+=kspell
-set complete=.,w,b,u,t
 set completeopt=longest,menuone
 
 " Always use vertical diffs
@@ -286,15 +282,12 @@ hi StatusLine guibg=#be5046
 hi StatusLineNC guibg=#54211e guifg=#5dc1c6
 set guifont=Menlo:h14
 
-let g:OmniSharp_server_use_mono = 1
-
-
-
 " Convenience mappings ---------------------------------------------------- {{{
 
 " hitting jj in insert mode escapes
 inoremap jj <ESC>
 inoremap jk <ESC>
+noremap <leader>w ,w<cr>
 
 " reload files when set autoread is active with F5
 nnoremap <F5> :checktime<CR>:redraw!<CR>
@@ -614,7 +607,7 @@ nnoremap <C-p> :Files<cr>
 nnoremap <C-g> :Rg<cr>
 nnoremap <silent> <space>. :Buffers<cr>
 nnoremap <silent> <space>l :Lines<cr>
-nnoremap <silent> <space>a :Rg<cr>
+nnoremap <silent> <space>a :Rg 
 nnoremap <silent> <space>h :History:<cr>
 let g:fzf_history_dir = '~/.local/share/fzf-history'
 
@@ -626,12 +619,6 @@ nnoremap <silent> <leader>gc :Gcommit<CR><C-w>20+
 " Gitgutter
 let g:gitgutter_max_signs = 10000
 
-if filereadable(expand("~/.vim/mappings.vim"))
-    source ~/.vim/mappings.vim
-endif
-
-" Local config
-if filereadable($HOME . "/.vimrc.local")
-  source ~/.vimrc.local
-endif
+" Omnisharp
+let g:OmniSharp_server_use_mono = 1
 
