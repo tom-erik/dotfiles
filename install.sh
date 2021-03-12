@@ -92,6 +92,9 @@ main() {
   if [ ! -d "$HOME/.vim/spell" ]; then
     mkdir "$HOME/.vim/spell"
     cp $EXPORT_DIR/spellfiles/* "$HOME/.vim/spell/"
+    rm -f "$HOME/.vim/custom-dictionary.utf-8.add*"
+    ln -s "$EXPORT_DIR/custom-dictionary.utf-8.add" "$HOME/.vim/custom-dictionary.utf-8.add*"
+    touch "$HOME/.vim-local-dictionary.utf-8.add"
   fi
 
   git config --global core.excludesfile ~/.gitignore_global
