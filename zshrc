@@ -7,7 +7,8 @@ export ZSH=$HOME/.oh-my-zsh
 # Set name of the theme to load. Optionally, if you set this to "random"
 # it'll load a random theme each time that oh-my-zsh is loaded.
 # See https://github.com/robbyrussell/oh-my-zsh/wiki/Themes
-ZSH_THEME="agnoster"
+ZSH_THEME="dracula"
+#ZSH_THEME="agnoster"
 #ZSH_THEME="pygmalion"
 
 # Uncomment the following line to use case-sensitive completion.
@@ -50,6 +51,10 @@ if (( ! ${fpath[(I)/usr/local/share/zsh/site-functions]} )); then
   FPATH=/usr/local/share/zsh/site-functions:$FPATH
 fi
 
+# NVM config
+export NVM_LAZY=1
+export NVM_AUTOLOAD=1
+
 # Uncomment the following line if you want to disable marking untracked files
 # under VCS as dirty. This makes repository status check for large repositories
 # much, much faster.
@@ -67,7 +72,7 @@ fi
 # Custom plugins may be added to ~/.oh-my-zsh/custom/plugins/
 # Example format: plugins=(rails git textmate ruby lighthouse)
 # Add wisely, as too many plugins slow down shell startup.
-plugins=( direnv git github z history fzf docker zsh-syntax-highlighting)
+plugins=( direnv git github z history fzf docker zsh-syntax-highlighting )
 
 source $ZSH/oh-my-zsh.sh
 
@@ -114,31 +119,8 @@ autoload -U compinit && compinit -C
 autoload bashcompinit && bashcompinit
 complete -C '/usr/local/bin/aws_completer' aws
 
-# export NVM_DIR="$HOME/.nvm"
-# [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
-# Improve shell startup http://broken-by.me/lazy-load-nvm/
-nvm() {
-    unset -f nvm
-    export NVM_DIR=~/.nvm
-    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
-    nvm "$@"
-}
- 
-node() {
-    unset -f node
-    export NVM_DIR=~/.nvm
-    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
-    node "$@"
-}
- 
-npm() {
-    unset -f npm
-    export NVM_DIR=~/.nvm
-    [ -s "$NVM_DIR/nvm.sh" ] && . "$NVM_DIR/nvm.sh"  # This loads nvm
-    npm "$@"
-}
-
 test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell_integration.zsh"
+# test -e "${HOME}/bin/gruvbox_256palette.sh" && source "${HOME}/bin/gruvbox_256palette.sh"
 
 # Created by `userpath` on 2020-12-18 21:44:00
 export PATH="$PATH:$HOME/.local/bin"
@@ -153,6 +135,8 @@ show_virtual_env() {
 }
 PS1='$(show_virtual_env)'$PS1
 
+# BUGFIX: something sets extendedglob
+unsetopt extendedglob
 
 ##### ALIASES
 alias f="find . -name"
