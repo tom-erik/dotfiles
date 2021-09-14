@@ -182,6 +182,8 @@ augroup vimrcEx
   autocmd FileType mail setlocal comments+=nb:>
   autocmd FileType mail setlocal formatoptions+=awq
   autocmd BufNewFile,BufRead neomutt-* set ft=mail
+
+  autocmd FileType make set noexpandtab shiftwidth=8 softtabstop=0
 augroup END
 
 augroup cline
