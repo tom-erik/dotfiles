@@ -153,8 +153,8 @@ alias repos="hub api 'orgs/SafeConsult/repos?per_page=100' --paginate -t | awk '
 alias left='ls -t -1'
 
 # Create a Python virtual environment
-alias ve='python3 -m venv ./venv'
-alias va='source ./venv/bin/activate'
+alias ve='python3 -m venv ./.venv'
+alias va='source ./.venv/bin/activate'
 
 # Cat with syntax highlightinh
 alias ccat='pygmentize -O style=monokai -f console256 -g'
@@ -207,3 +207,5 @@ fd() {
 fh() {
   eval $( ([ -n "$ZSH_NAME" ] && fc -l 1 || history) | fzf +s --tac | sed 's/ *[0-9]* *//')
 }
+
+unsetopt share_history
