@@ -1,5 +1,4 @@
 # If you come from bash you might have to change your $PATH.
-export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 # Path to your oh-my-zsh installation.
 export ZSH=$HOME/.oh-my-zsh
@@ -120,6 +119,7 @@ test -e "${HOME}/.iterm2_shell_integration.zsh" && source "${HOME}/.iterm2_shell
 
 # Created by `userpath` on 2020-12-18 21:44:00
 export PATH="$PATH:$HOME/.local/bin"
+export PATH=$HOME/bin:/usr/local/bin:$PATH
 
 setopt PROMPT_SUBST
 
@@ -209,3 +209,6 @@ fh() {
 }
 
 unsetopt share_history
+
+export ITERM_ENABLE_SHELL_INTEGRATION_WITH_TMUX=YES
+source ~/.iterm2_shell_integration.zsh
