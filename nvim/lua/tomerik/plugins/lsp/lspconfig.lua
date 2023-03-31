@@ -20,7 +20,7 @@ local keymap = vim.keymap -- for conciseness
 
 local config = {
   -- disable virtual text
-  virtual_text = false,
+  -- virtual_text = false,
 }
 
 vim.diagnostic.config(config)
@@ -100,6 +100,7 @@ lspconfig["emmet_ls"].setup({
 lspconfig["omnisharp"].setup({
   capabilities = capabilities,
   on_attach = on_attach,
+  cmd = { "dotnet", "/Users/tom-erik/.local/omnisharp/OmniSharp.dll" },
 })
 
 -- configure lua server (with special settings)

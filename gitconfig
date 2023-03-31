@@ -1,0 +1,24 @@
+[user]
+	name = Tom-Erik Duestad
+	email = tom-erik@safeconsult.no
+[filter "lfs"]
+	clean = git-lfs clean -- %f
+	smudge = git-lfs smudge -- %f
+	process = git-lfs filter-process
+	required = true
+[core]
+	excludesfile = /Users/tom-erik/.gitignore_global
+	autocrlf = input
+	editor = nvim
+[pull]
+	rebase = true
+	ff = only
+[fetch]
+	prune = true
+[merge]
+	ff = false
+[alias]
+	last = log -1 HEAD --stat
+	dv = difftool -t vimdiff -y
+[init]
+	defaultBranch = main
