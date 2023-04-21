@@ -111,7 +111,7 @@ export LANG=en_US.UTF-8
 [[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
 
 alias vim="nvim"
-export PATH=/opt/homebrew/opt/python@3.10/libexec/bin:$HOME/bin:$PATH
+export PATH=$(brew --prefix)/opt/python@3.10/libexec/bin:$HOME/bin:$PATH
 export DOTNET_ROOT=/usr/local/share/dotnet
 
 export NVM_DIR="$HOME/.nvm"
