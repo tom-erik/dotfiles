@@ -10,15 +10,42 @@
 	excludesfile = /Users/tom-erik/.gitignore_global
 	autocrlf = input
 	editor = nvim
+	pager = delta
 [pull]
 	rebase = true
-	ff = only
 [fetch]
 	prune = true
 [merge]
-	ff = false
+	conflictstyle = zdiff3
 [alias]
 	last = log -1 HEAD --stat
 	dv = difftool -t vimdiff -y
+	staash = stash --all
+	fpush = push
+  graph = log --graph --date-order -C -M --pretty=format:\"<%h> %ad %Cgreen%d%Creset %s\" --all --date=short
 [init]
 	defaultBranch = main
+[maintenance]
+	repo = /Users/tom-erik/Developer/traktortakst
+	repo = /Users/tom-erik/Developer/carweb-caranalyze
+	repo = /Users/tom-erik/Developer/bilforlaget-bfpublish
+[rerere]
+	enabled = true
+	autoUpdate = true
+[branch]
+	sort = -committerdate
+[column]
+	ui = auto
+[rebase]
+	autosquash = true
+	autostash = true
+[interactive]
+  diffFilter = delta --color-only
+[delta]
+  navigate = true    # use n and N to move between diff sections
+  light = false      # set to true if you're in a terminal w/ a light background color (e.g. the default macOS terminal)
+[diff]
+  colorMoved = default
+	algorithm = histogram
+[push]
+	autoSetupRemote = true
