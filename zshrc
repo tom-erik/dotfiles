@@ -79,6 +79,9 @@ export NVM_DIR="$HOME/.nvm"
 
 # eval "$(register-python-argcomplete pipx)"
 [[ -f ~/.iterm2_shell_integration.zsh ]] && source ~/.iterm2_shell_integration.zsh
+
+source "$DOTFILES/plugins/alias-tips/alias-tips.plugin.zsh"
+
 eval "$(direnv hook zsh)"
 eval "$(zoxide init --cmd cd zsh)"
 eval "$(starship init zsh)"
