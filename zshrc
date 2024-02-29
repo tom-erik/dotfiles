@@ -3,11 +3,15 @@ export HISTFILESIZE=1000000000
 export HISTSIZE=1000000000
 export HISTTIMEFORMAT="[%F %T] "
 
+export LANG=en_US.UTF-8
+export LC_ALL=en_US.UTF-8
+
 setopt INC_APPEND_HISTORY
 setopt EXTENDED_HISTORY
 setopt HIST_IGNORE_ALL_DUPS
 
-export EDITOR='nvim'
+export REPOS="$HOME/Developer"
+export DOTFILES="$REPOS/dotfiles"
 
 source $HOME/Developer/oss/zsh-autocomplete/zsh-autocomplete.plugin.zsh
 
@@ -20,9 +24,9 @@ autoload -Uz compinit
 # compinit 
 
 export PATH="$PATH:$HOME/bin"
+export EDITOR='nvim'
 
 # directories
-export REPOS="$HOME/Developer"
 
 alias vim="nvim"
 alias v="nvim"
@@ -46,10 +50,18 @@ alias tree="exa --tree"
 
 alias cat="bat"
 alias t="tmux"
+alias p="pnpm"
 
 # cd
 alias repos="cd $REPOS"
-alias dot="cd $REPOS/dotfiles"
+alias dot="cd $DOTFILES"
+alias garden="cd $HOME/Documents/Garden"
+alias para="cd $HOME/Documents/Garden/Para"
+
+alias traktor="cd $REPOS/traktortakst"
+alias api="cd $REPOS/traktortakst_api"
+alias dev="cd $REPOS/traktordev"
+alias bfp="cd $REPOS/bilforlaget-bfpublish"
 
 # editing
 alias ez='v ~/.zshrc'
