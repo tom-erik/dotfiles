@@ -1,3 +1,5 @@
+# CodeWhisperer pre block. Keep at the top of this file.
+[[ -f "${HOME}/Library/Application Support/codewhisperer/shell/zshrc.pre.zsh" ]] && builtin source "${HOME}/Library/Application Support/codewhisperer/shell/zshrc.pre.zsh"
 export HISTFILE="$HOME/.zsh_history"
 export HISTFILESIZE=1000000000
 export HISTSIZE=1000000000
@@ -13,15 +15,12 @@ setopt HIST_IGNORE_ALL_DUPS
 export REPOS="$HOME/Developer"
 export DOTFILES="$REPOS/dotfiles"
 
-source $HOME/Developer/oss/zsh-autocomplete/zsh-autocomplete.plugin.zsh
-
 if command -v brew > /dev/null; then
    fpath=($(brew --prefix)/share/zsh/site-functions $fpath)
 fi
 
 autoload -Uz compinit
-# compinit is disabled because of zsh-autocomplete
-# compinit 
+compinit 
 
 export PATH="$PATH:$HOME/bin"
 export EDITOR='nvim'
@@ -83,6 +82,9 @@ export NVM_DIR="$HOME/.nvm"
 source "$DOTFILES/plugins/alias-tips/alias-tips.plugin.zsh"
 
 eval "$(direnv hook zsh)"
-eval "$(zoxide init --cmd cd zsh)"
+# eval "$(zoxide init --cmd cd zsh)"
 eval "$(starship init zsh)"
 eval "$(thefuck --alias)"
+
+# CodeWhisperer post block. Keep at the bottom of this file.
+[[ -f "${HOME}/Library/Application Support/codewhisperer/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/codewhisperer/shell/zshrc.post.zsh"
