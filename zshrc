@@ -94,9 +94,6 @@ export NVM_DIR="$HOME/.nvm"
 [ -s "$NVM_DIR/nvm.sh" ] && \. "$NVM_DIR/nvm.sh"  # This loads nvm
 [ -s "$NVM_DIR/bash_completion" ] && \. "$NVM_DIR/bash_completion"  # This loads nvm bash_completion
 
-# eval "$(register-python-argcomplete pipx)"
-[[ -f ~/.iterm2_shell_integration.zsh ]] && source ~/.iterm2_shell_integration.zsh
-
 source "$DOTFILES/plugins/alias-tips/alias-tips.plugin.zsh"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
