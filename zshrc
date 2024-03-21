@@ -44,8 +44,8 @@ alias lg="lazygit"
 
 # ls
 alias ls="exa --icons"
-alias ll="exa -alh"
-alias la="exa --all --long --group-directories-first --header"
+alias ll="exa --long --header"
+alias la="exa --all --long --header"
 alias tree="exa --tree"
 
 # finds all files recursively and sorts by last modification, ignore hidden files
@@ -98,7 +98,7 @@ source "$DOTFILES/plugins/alias-tips/alias-tips.plugin.zsh"
 
 [ -f ~/.fzf.zsh ] && source ~/.fzf.zsh
 eval "$(direnv hook zsh)"
-# eval "$(zoxide init --cmd cd zsh)"
+eval "$(zoxide init zsh)"
 eval "$(starship init zsh)"
 eval "$(thefuck --alias)"
 
