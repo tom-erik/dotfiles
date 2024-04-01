@@ -11,6 +11,17 @@ export LC_ALL=en_US.UTF-8
 setopt INC_APPEND_HISTORY
 setopt EXTENDED_HISTORY
 setopt HIST_IGNORE_ALL_DUPS
+setopt HIST_FIND_NO_DUPS
+
+##### BINDINGS
+# bindkey "^R" history-incremental-search-backward
+bindkey "\e[A" history-beginning-search-backward
+bindkey "\e[B" history-beginning-search-forward
+bindkey "\eF"  forward-word
+bindkey "\eB"  backward-word
+
+export EDITOR='nvim'
+export PATH="$PATH:$HOME/bin"
 
 export REPOS="$HOME/Developer"
 export DOTFILES="$REPOS/dotfiles"
@@ -23,9 +34,6 @@ fi
 
 autoload -Uz compinit
 compinit 
-
-export PATH="$PATH:$HOME/bin"
-export EDITOR='nvim'
 
 alias vim="nvim"
 alias v="nvim"
