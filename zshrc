@@ -72,15 +72,17 @@ alias scripts="cd $SCRIPTS"
 
 alias traktor="cd $REPOS/traktortakst"
 alias api="cd $REPOS/traktortakst_api"
-alias dev="cd $REPOS/traktordev"
+alias tdev="cd $REPOS/traktordev"
 alias bfp="cd $REPOS/bilforlaget-bfpublish"
 alias cara="cd $REPOS/carweb-caranalyze"
+alias ibk="cd $REPOS/sentinel-carweb-calculator"
 
 # editing
 alias ez='v ~/.zshrc'
 alias sz='source ~/.zshrc'
 alias ev='cd ~/.config/nvim/ && v init.lua'
 alias et='v todo.md'
+alias egt='v $SECOND_BRAIN/todo.md'
 alias er='v README.md'
 
 # vim & second brain
@@ -109,9 +111,8 @@ eval "$(direnv hook zsh)"
 eval "$(zoxide init zsh)"
 eval "$(starship init zsh)"
 eval "$(thefuck --alias)"
-if command -v ngrok &>/dev/null; then
-    eval "$(ngrok completion)"
-fi
+eval "$(gh copilot alias -- zsh)"
+eval "$(ngrok completion)"
 
 # CodeWhisperer post block. Keep at the bottom of this file.
 [[ -f "${HOME}/Library/Application Support/codewhisperer/shell/zshrc.post.zsh" ]] && builtin source "${HOME}/Library/Application Support/codewhisperer/shell/zshrc.post.zsh"
